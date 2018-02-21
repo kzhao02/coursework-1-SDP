@@ -31,6 +31,6 @@ public class BnzInstruction extends Instruction {
 
     @Override
     public String toString() {
-        return super.toString()+" ";
+        return super.toString()+" if the contents of register "+label+" is not 0, "+"then make the statement labeled "+label2+" the next on the execute";
     }
 }
