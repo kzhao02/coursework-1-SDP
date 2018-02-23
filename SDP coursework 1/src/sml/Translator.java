@@ -1,24 +1,13 @@
 package sml;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Collections;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-import java.lang.reflect.*;
 
 /*
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
@@ -87,50 +76,64 @@ public class Translator {
     // removed. Translate line into an instruction with label label
     // and return the instruction
     public Instruction getInstruction(String label) {
-        int s1; // Possible operands of the instruction
-        int s2;
-        int r;
-        String x;
-
         if (line.equals(""))
             return null;
-
         String ins = scan();
-        switch (ins) {
-            case "add":
-                r = scanInt();
-                s1 = scanInt();
-                s2 = scanInt();
-                return new AddInstruction(label, r, s1, s2);
-            case "lin":
-                r = scanInt();
-                s1 = scanInt();
-                return new LinInstruction(label, r, s1);
-            case "sub":
-                r = scanInt();
-                s1 = scanInt();
-                s2 = scanInt();
-                return new SubInstruction(label, r, s1, s2);
-            case "mul":
-                r = scanInt();
-                s1 = scanInt();
-                s2 = scanInt();
-                return new MulInstruction(label, r, s1, s2);
-            case "div":
-                r = scanInt();
-                s1 = scanInt();
-                s2 = scanInt();
-                return new DivInstruction(label, r, s1, s2);
-            case "out":
-                s1 = scanInt();
-                return new OutInstruction(label, s1);
-            case "bnz":
-                s1 = scanInt();
-                x= scan();
-                return new BnzInstruction(label, s1, x);
-        }
+        Object[] parameters;
+        char initial = ins.charAt(0);
+        char capital = Character.toUpperCase(initial);
+        StringBuffer temp = new StringBuffer(ins);
+        temp.setCharAt(0,capital);
+        String toString = temp.toString( );
+        String instruction = "sml." + toString + "Instruction";
 
-        // You will have to write code here for the other instructions.
+        try {
+            Class xxxInstruction = Class.forName(instruction);
+            Constructor[] constructors = xxxInstruction.getConstructors();
+            Constructor xxxConstructor = constructors[1];
+            Class[] type = xxxConstructor.getParameterTypes();
+            int typeLength = type.length;
+            parameters = new Object[typeLength];
+            int paraLength= parameters.length;
+            for (int i=0;i<=paraLength-1;i++)
+            {
+                if (i==0)
+                {
+                    parameters[i]=label;
+                }
+                else
+                {
+                    Class second = type[i];
+                    if (second.getName().equals("java.lang.String"))
+                    {
+                        String x = scan();
+                        parameters[i]=x;
+                    }
+                    else if (second.getName().equals("int"))
+                    {
+                        Integer y = scanInt();
+                        parameters[i]=y;
+                    }
+                }
+            }
+            return (Instruction) xxxConstructor.newInstance(parameters);
+        }
+        catch (ClassNotFoundException e )
+        {
+            System.out.println( instruction + "class" + " can not be found");
+        }
+        catch (InvocationTargetException e )
+        {
+            System.out.println("can not invocate target");
+        }
+        catch (IllegalAccessException e )
+        {
+            System.out.println("illegal access");
+        }
+        catch (InstantiationException e )
+        {
+            System.out.println(" instantiation failed");
+        }
 
         return null;
     }
