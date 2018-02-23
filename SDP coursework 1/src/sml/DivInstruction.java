@@ -1,15 +1,15 @@
 package sml;
 
-public class DivideInstruction extends Instruction {
+public class DivInstruction extends Instruction {
     private int result;
     private int op1;
     private int op2;
 
-    public DivideInstruction(String label, String op) {
+    public DivInstruction(String label, String op) {
         super(label, op);
     }
 
-    public DivideInstruction(String label, int result, int op1, int op2) {
+    public DivInstruction(String label, int result, int op1, int op2) {
         this(label, "divide");
         this.result = result;
         this.op1 = op1;

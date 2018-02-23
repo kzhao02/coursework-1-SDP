@@ -1,10 +1,24 @@
 package sml;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.lang.reflect.*;
 
 /*
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
@@ -96,17 +110,17 @@ public class Translator {
                 r = scanInt();
                 s1 = scanInt();
                 s2 = scanInt();
-                return new SubtractInstruction(label, r, s1, s2);
+                return new SubInstruction(label, r, s1, s2);
             case "mul":
                 r = scanInt();
                 s1 = scanInt();
                 s2 = scanInt();
-                return new MultiplyInstruction(label, r, s1, s2);
+                return new MulInstruction(label, r, s1, s2);
             case "div":
                 r = scanInt();
                 s1 = scanInt();
                 s2 = scanInt();
-                return new DivideInstruction(label, r, s1, s2);
+                return new DivInstruction(label, r, s1, s2);
             case "out":
                 s1 = scanInt();
                 return new OutInstruction(label, s1);
